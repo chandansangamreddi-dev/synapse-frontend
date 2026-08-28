@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { login } from './auth.service'
+import { useSessionStore } from '../../stores/sessionStore'
 
 const loginSchema = z.object({
   username: z.string().min(1, 'Username is required'),
@@ -10,6 +12,8 @@ const loginSchema = z.object({
 type LoginForm = z.infer<typeof loginSchema>
 
 export function LoginPage() {
+  const setSession = useSessionStore((state) => state.setSession)
+
   const {
     register,
     handleSubmit,
@@ -18,8 +22,13 @@ export function LoginPage() {
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = async () => {
-    // TBD - connect to confirmed SYNAPSE authentication endpoint.
+  const onSubmit = async (values: LoginForm) => {
+    try {
+      const response = await login(values)
+      setSession(response.user)
+    } catch (error) {
+      console.error('Login failed:', error)
+    }
   }
 
   return (
