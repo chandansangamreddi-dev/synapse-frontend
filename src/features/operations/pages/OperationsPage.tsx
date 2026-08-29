@@ -81,7 +81,10 @@ export function OperationsPage({ overview: providedOverview }: OperationsPagePro
         </div>
 
         <div className="lg:col-span-12">
-          <LiveTrafficTimeline timeHorizon="Unavailable" items={[]} />
+          <LiveTrafficTimeline
+            timeHorizon="Next 2 hours"
+            items={[]}
+          />
         </div>
 
         <div className="lg:col-span-8">
