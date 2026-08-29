@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { login } from './auth.service'
 import { useSessionStore } from '../../stores/sessionStore'
@@ -13,6 +14,7 @@ type LoginForm = z.infer<typeof loginSchema>
 
 export function LoginPage() {
   const setSession = useSessionStore((state) => state.setSession)
+  const navigate = useNavigate()
 
   const {
     register,
@@ -26,6 +28,7 @@ export function LoginPage() {
     try {
       const response = await login(values)
       setSession(response.user)
+      navigate('/')
     } catch (error) {
       console.error('Login failed:', error)
     }
